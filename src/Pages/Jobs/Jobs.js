@@ -5,9 +5,9 @@ import JobsCard from '../../components/JobsCard/JobsCard';
 
 const URL = 'https://www.themuse.com/api/public/jobs?page=1';
 
-const Jobs = () => {
-  const [jobList, setJobList] = useState([]);
+const Jobs = ({navigation}) => {
   const [loading, setLoading] = useState(true);
+  const [jobList, setJobList] = useState([]);
 
   async function fetchData() {
     const response = await axios.get(URL);
@@ -19,14 +19,21 @@ const Jobs = () => {
     fetchData();
   }, []);
 
+
+  function handleJobSelect(item) {
+    navigation.navigate('Jobs Detail', {item});
+  }
+
   const renderJobs = ({item}) => (
     <JobsCard
       name={item.name}
       company={item.company.name}
       locations={item.locations[0].name}
       levels={item.levels[0].name}
+      onSelect={() => handleJobSelect(item)}
     />
   );
+
   return (
     <View>
       {loading ? (
@@ -46,4 +53,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-})
+});
