@@ -1,18 +1,42 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   useWindowDimensions,
   ScrollView,
   Button,
+  Alert,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
 import RenderHTML from 'react-native-render-html';
 import styles from './JobsDetail.style';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const JobsDetail = ({route}) => {
-  const {item} = route.params;
+  const [job, setJob] = useState([]);
+  const [fav, setFav] = useState([]);
 
+  const {item} = route.params;
   const {width} = useWindowDimensions();
+
+  const dispatch = useDispatch();
+
+  const handleAdd = jobs => {
+    setFav([...fav, job]);
+    setJob('');
+    const newList = [...fav];
+    const index = fav.indexOf(jobs);
+    newList.splice(index, 1);
+    setJob(newList);
+    dispatch({type: 'ADD_FAVORITIES', payload: {jobs}});
+  };
+
+  const handleSubmit = () => {
+    Alert.alert(
+      'CodeWork',
+      'Your job application has been successfully submitted!',
+    );
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -33,8 +57,12 @@ const JobsDetail = ({route}) => {
           <RenderHTML source={{html: item.contents}} contentWidth={width} />
         </View>
         <View style={styles.button_container}>
-          <Button color="#e53935" title="Submit" />
-          <Button color="#e53935" title="Add Favorities" />
+          <Button onPress={handleSubmit} color="#e53935" title="Submit" />
+          <Button
+            color="#e53935"
+            title="Add Favorities"
+            onPress={() => handleAdd(item)}
+          />
         </View>
       </View>
     </ScrollView>

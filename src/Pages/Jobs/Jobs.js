@@ -19,9 +19,8 @@ const Jobs = ({navigation}) => {
     fetchData();
   }, []);
 
-
   function handleJobSelect(item) {
-    navigation.navigate('Jobs Detail', {item});
+    navigation.navigate('Detail', {item});
   }
 
   const renderJobs = ({item}) => (
